@@ -1,0 +1,51 @@
+import requests
+
+# imports data from API
+api_name = "e75936b1fd990ef230f7bc74358fe801"
+print("Hello! Welcome to the Weather App. \nTo begin, answer the following test prompt: ")
+user = input("Enter a random city: ")
+data = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={user}&units=imperial&APPID={api_name}")
+if data.json()["cod"] == "404":
+    print("No City Found")
+    exit()
+
+print("Wonderful! Our app is used to compare cities all across the United States.")
+
+
+def compare_weather_conditions():
+    lowest_temp = None
+    lowest_index = None
+    best_weather = None
+    num_city = int(input("How many cities would you like to compare? "))
+    for num_city in range (1, num_city + 1):
+        city_name = input(f"Enter city #{num_city }: ")
+        city_temp = data.json()["main"]["temp"]
+        city_weather = data.json()["weather"][0]["main"]
+
+        print()
+        print(f"{city_name} has a temperature of {city_temp} and the weather is {city_weather}")
+
+        if lowest_temp is None or lowest_temp > city_temp:
+            lowest_temp = city_temp
+            lowest_index = city_name
+
+        if city_weather == "Clear":
+            best_weather = city_name
+
+    print()
+    print(f"The {lowest_index} has the lowest temperature of {lowest_temp}.")
+    print(f"{best_weather} has the best weather!")
+
+def get_city_name():
+    # city_name = input(f"Enter city #{num_city}: ")
+    return input(f"Enter city: ")
+
+def get_city_temp():
+    return data.json()["main"]["temp"]
+
+def get_city_weather():
+    return data.json()["weather"][0]["main"]
+
+# main
+# calls for user input
+compare_weather_conditions()
